@@ -30,21 +30,35 @@ func newLogger(p string) *Logger {
 // Create non-foramted logs
 
 func (l *Logger) Debug(v ...interface{}) {
-
 	l.debug.Println(v...)
 }
 
 func (l *Logger) Info(v ...interface{}) {
-
-	l.debug.Println(v...)
+	l.info.Println(v...)
 }
 
 func (l *Logger) Warn(v ...interface{}) {
-
-	l.debug.Println(v...)
+	l.warning.Println(v...)
 }
 
 func (l *Logger) Error(v ...interface{}) {
+	l.err.Println(v...)
+}
 
-	l.debug.Println(v...)
+// Create formated logs
+
+func (l *Logger) Debugf(format string, v ...interface{}) {
+	l.debug.Printf(format, v...)
+}
+
+func (l *Logger) Infof(format string, v ...interface{}) {
+	l.info.Printf(format, v...)
+}
+
+func (l *Logger) Warnf(format string, v ...interface{}) {
+	l.warning.Printf(format, v...)
+}
+
+func (l *Logger) Errorf(format string, v ...interface{}) {
+	l.err.Printf(format, v...)
 }
