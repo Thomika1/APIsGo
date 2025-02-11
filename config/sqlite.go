@@ -10,15 +10,12 @@ import (
 
 func InitializeSQLite() (*gorm.DB, error) {
 	logger := GetLogger("sqlite")
-
-	dbPath := "./db/main.go"
-
-	// Checks if db file exists
+	dbPath := "./db/main.db"
+	// Check if the database file exists
 	_, err := os.Stat(dbPath)
-
 	if os.IsNotExist(err) {
-		logger.Info("->database file not found...")
-		// Create database  file\
+		logger.Info("database file not found, creating...")
+		// Create the database file and directory
 		err = os.MkdirAll("./db", os.ModePerm)
 		if err != nil {
 			return nil, err
@@ -30,19 +27,18 @@ func InitializeSQLite() (*gorm.DB, error) {
 		file.Close()
 	}
 
+	// Create DB and connect
 	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
-
 	if err != nil {
-		logger.Errorf("->sqlite opening error: %v", err)
+		logger.Errorf("sqlite opening error: %v", err)
 		return nil, err
 	}
-
-	// Migrate the schema
+	// Migrate the Schema
 	err = db.AutoMigrate(&schemas.Opening{})
 	if err != nil {
-		logger.Errorf("->sqlite automigration error: %v", err)
+		logger.Errorf("sqlite automigration error: %v", err)
+		return nil, err
 	}
-
-	// Return db
+	// Return the DB
 	return db, nil
 }
